@@ -14,16 +14,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import webapp2
+import webapp2 #the reason for the format of subclasses and methods below is
+#due to the use of the webapp2 library; if a different web handler were used,
+#the format will be different; but the concepts are the same.
 import random
+
+def get_random_fortune():
+
+    fortunes = [
+    "You will find millions soon!",
+    "You will find love soon!",
+    "You will buy a house soon!",
+    "You will lose everything soon!"
+    ]
+
+    random_index = random.randint(0,(len(fortunes)-1))
+    return fortunes[random_index]
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         header = "<h1>Fortune Cookie</h1>"
-        lucky_number = random.randint(1,100)
-        number_sentence = 'Your lucky number: ' + str(lucky_number)
+
+        fortune = "<strong>" + get_random_fortune() + "</strong>"
+        fortune_sentence = "Your fortune: " + fortune
+        fortune_paragraph = "<p>" + fortune_sentence + "<p>"
+        lucky_number = "<strong>" + str(random.randint(1,100)) + "</strong>"
+        number_sentence = 'Your lucky number: ' + lucky_number
         number_paragraph = '<p>' + number_sentence + '</p>'
-        self.response.write(header + number_paragraph)
+        again_button = "<a href = '.'><button>More Cookie Please!</button></a>"
+        content = header + fortune_paragraph + number_paragraph + again_button
+        self.response.write(content)
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
